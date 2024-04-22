@@ -1,0 +1,38 @@
+{
+  "name": "tanstack-router-example",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "check": "biome check --apply ."
+  },
+  "dependencies": {
+    "@kuma-ui/core": "^1.5.6",
+    "@tanstack/react-form": "^0.19.2",
+    "@tanstack/react-query": "^5.29.2",
+    "@tanstack/react-query-devtools": "^5.29.2",
+    "@tanstack/react-router": "^1.29.2",
+    "msw": "^2.2.14",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "zod": "^3.22.5"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.7.0",
+    "@kuma-ui/vite": "^1.2.2",
+    "@tanstack/router-devtools": "^1.29.2",
+    "@tanstack/router-vite-plugin": "^1.30.0",
+    "@types/react": "^18.2.66",
+    "@types/react-dom": "^18.2.22",
+    "@vitejs/plugin-react": "^4.2.1",
+    "typescript": "^5.2.2",
+    "vite": "^5.2.0"
+  },
+  "packageManager": "pnpm@9.0.4+sha256.caa915eaae9d9aefccf50ee8aeda25a2f8684d8f9d5c6e367eaf176d97c1f89e",
+  "msw": {
+    "workerDirectory": ["public"]
+  }
+}
