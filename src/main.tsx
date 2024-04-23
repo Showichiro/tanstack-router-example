@@ -3,6 +3,7 @@ import { StrictMode, Suspense } from "react";
 import ReactDOM from "react-dom/client";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import packageJson from "../package.json";
 import { AuthProvider, useAuth } from "./global/auth";
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
@@ -28,7 +29,14 @@ const InnerApp = () => {
 async function enableMocking() {
   const { worker } = await import("./mocks/server");
 
-  return worker.start();
+  if (import.meta.env.DEV) {
+    return worker.start();
+  }
+  return worker.start({
+    serviceWorker: {
+      url: `${packageJson.homepage}/mockServiceWorker.js`,
+    },
+  });
 }
 
 enableMocking().then(() => {
