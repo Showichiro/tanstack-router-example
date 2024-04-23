@@ -35,6 +35,9 @@ async function enableMocking() {
   return worker.start({
     serviceWorker: {
       url: `${packageJson.homepage}/mockServiceWorker.js`,
+      options: {
+        scope: "/",
+      },
     },
   });
 }
