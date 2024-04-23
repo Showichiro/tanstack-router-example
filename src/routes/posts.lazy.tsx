@@ -1,10 +1,10 @@
-import { Button, Heading } from "@kuma-ui/core";
+import { Box, Button, Flex, Heading, css } from "@kuma-ui/core";
 import {
   keepPreviousData,
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import { createLazyFileRoute } from "@tanstack/react-router";
+import { Link, Outlet, createLazyFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import type { Post } from "../mocks/server";
 
@@ -13,7 +13,7 @@ export const Route = createLazyFileRoute("/posts")({
 });
 
 const fetchPosts = async (
-  page = 0
+  page = 0,
 ): Promise<{
   posts: ReadonlyArray<Post>;
   hasMore: boolean;
@@ -31,10 +31,11 @@ const fetchPosts = async (
 function Posts() {
   const [page, setPage] = useState(0);
   const queryClient = useQueryClient();
-  const { data, isPlaceholderData } = useQuery({
+  const { data, isPlaceholderData, isLoading } = useQuery({
     queryKey: ["posts", page],
     queryFn: () => fetchPosts(page),
     placeholderData: keepPreviousData,
+    staleTime: Number.POSITIVE_INFINITY,
   });
 
   useEffect(() => {
@@ -48,43 +49,54 @@ function Posts() {
 
   return (
     <>
-      <Heading as="h1" color="#333">
-        Posts
-      </Heading>
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Title</th>
-            <th>content</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data?.posts.map((post) => (
-            <tr key={post.id}>
-              <td>{post.id}</td>
-              <td>{post.title}</td>
-              <td>{post.content}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <Button
-        type="button"
-        onClick={() => setPage((old) => Math.max(old - 1, 0))}
-        disabled={page === 0}
-      >
-        Prev
-      </Button>{" "}
-      <Button
-        type="button"
-        onClick={() => {
-          setPage((old) => (data?.hasMore ? old + 1 : old));
-        }}
-        disabled={isPlaceholderData || !data?.hasMore}
-      >
-        Next
-      </Button>
+      <Flex gap={4}>
+        <Box
+          marginX={4}
+          className={css`
+            width: 150px;
+          `}
+        >
+          <Heading as="h1" color="#333">
+            Posts
+          </Heading>
+          <ul>
+            {isLoading && <li>Loading...</li>}
+            {data?.posts.map((post) => (
+              <li
+                key={post.id}
+                className={css`
+                  white-space: nowrap;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                `}
+              >
+                <Link to={"/posts/$id"} params={{ id: post.id.toString() }}>
+                  <span>{post.title.substring(0, 20)}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <Button
+            type="button"
+            onClick={() => setPage((old) => Math.max(old - 1, 0))}
+            disabled={page === 0}
+          >
+            Prev
+          </Button>{" "}
+          <Button
+            type="button"
+            onClick={() => {
+              setPage((old) => (data?.hasMore ? old + 1 : old));
+            }}
+            disabled={isPlaceholderData || !data?.hasMore}
+          >
+            Next
+          </Button>
+        </Box>
+        <Box flex={1}>
+          <Outlet />
+        </Box>
+      </Flex>
     </>
   );
 }

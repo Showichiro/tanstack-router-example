@@ -8,11 +8,11 @@
     "rules": {
       "recommended": true
     },
-    "ignore": ["public", "src/routeTree.gen.ts"]
+    "ignore": ["public", "src/routeTree.gen.ts", "node_modules"]
   },
   "formatter": {
     "enabled": true,
     "indentStyle": "space",
-    "ignore": ["public", "src/routeTree.gen.ts"]
+    "ignore": ["public", "src/routeTree.gen.ts", "node_modules"]
   }
 }
